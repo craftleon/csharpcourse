@@ -30,9 +30,27 @@ namespace COMP2614Assign06
         private void buttonEdit_Click(object sender, EventArgs e)
         {
             EditDialog dialog = new EditDialog();
+            dialog.Client = clientVM.Clients[dataGridViewClients.CurrentRow.Index];
             dialog.ShowDialog();
         }
 
+        private void dataGridViewClients_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // ignore column header double clicks 
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
+
+            buttonEdit_Click(sender, e);
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            // update to database
+        }
+
+        // setup DataGridView
         private void setupDataGridView()
         {
             // configure for readonly
@@ -149,5 +167,7 @@ namespace COMP2614Assign06
             note.SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridViewClients.Columns.Add(note);
         }
+
+        
     }
 }
