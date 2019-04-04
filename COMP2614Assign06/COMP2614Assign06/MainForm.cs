@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using COMP2614Assign06.Common;
 
 namespace COMP2614Assign06
 {
@@ -19,19 +20,37 @@ namespace COMP2614Assign06
 
         private ClientViewModel clientVM;
 
-        
-
         private void MainForm_Load(object sender, EventArgs e)
         {
             clientVM = new ClientViewModel();
             setupDataGridView();
         }
 
+        private void buttonNew_Click(object sender, EventArgs e)
+        {
+            EditDialog dialog = new EditDialog();
+            dialog.IsNewClient = true;
+            dialog.Client = new Client();   // create new empty Client instance
+            dialog.ShowDialog();
+            if (dialog.DialogResult == DialogResult.OK)
+            {
+                // add the new instance into ClientCollection list
+                clientVM.AddClient(dialog.Client);
+            }
+        }
+
         private void buttonEdit_Click(object sender, EventArgs e)
         {
             EditDialog dialog = new EditDialog();
-            dialog.Client = clientVM.Clients[dataGridViewClients.CurrentRow.Index];
+            dialog.IsNewClient = false;
+            int index = dataGridViewClients.CurrentRow.Index;
+            dialog.Client = new Client(clientVM.GetClientByIndex(index));    // create new Client with properties copied
             dialog.ShowDialog();
+            if (dialog.DialogResult == DialogResult.OK)
+            {
+                // reflect changes to ClientCollection list
+                clientVM.SetClientByIndex(index, dialog.Client);
+            }
         }
 
         private void dataGridViewClients_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -43,11 +62,6 @@ namespace COMP2614Assign06
             }
 
             buttonEdit_Click(sender, e);
-        }
-
-        private void buttonSave_Click(object sender, EventArgs e)
-        {
-            // update to database
         }
 
         // setup DataGridView
@@ -167,7 +181,5 @@ namespace COMP2614Assign06
             note.SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridViewClients.Columns.Add(note);
         }
-
-        
     }
 }

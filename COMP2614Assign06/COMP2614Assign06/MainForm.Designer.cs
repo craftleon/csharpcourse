@@ -30,18 +30,18 @@
         {
             this.buttonEdit = new System.Windows.Forms.Button();
             this.dataGridViewClients = new System.Windows.Forms.DataGridView();
-            this.buttonSave = new System.Windows.Forms.Button();
+            this.buttonNew = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClients)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonEdit
             // 
             this.buttonEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonEdit.Location = new System.Drawing.Point(543, 416);
+            this.buttonEdit.Location = new System.Drawing.Point(641, 417);
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(110, 23);
             this.buttonEdit.TabIndex = 1;
-            this.buttonEdit.Text = "&Edit Record";
+            this.buttonEdit.Text = "&Edit Client";
             this.buttonEdit.UseVisualStyleBackColor = true;
             this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
             // 
@@ -58,15 +58,16 @@
             this.dataGridViewClients.TabIndex = 0;
             this.dataGridViewClients.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewClients_CellDoubleClick);
             // 
-            // buttonSave
+            // buttonNew
             // 
-            this.buttonSave.Location = new System.Drawing.Point(676, 416);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(75, 23);
-            this.buttonSave.TabIndex = 2;
-            this.buttonSave.Text = "&Save";
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            this.buttonNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonNew.Location = new System.Drawing.Point(509, 417);
+            this.buttonNew.Name = "buttonNew";
+            this.buttonNew.Size = new System.Drawing.Size(110, 23);
+            this.buttonNew.TabIndex = 3;
+            this.buttonNew.Text = "&New Client";
+            this.buttonNew.UseVisualStyleBackColor = true;
+            this.buttonNew.Click += new System.EventHandler(this.buttonNew_Click);
             // 
             // MainForm
             // 
@@ -74,7 +75,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 461);
-            this.Controls.Add(this.buttonSave);
+            this.Controls.Add(this.buttonNew);
             this.Controls.Add(this.dataGridViewClients);
             this.Controls.Add(this.buttonEdit);
             this.MaximumSize = new System.Drawing.Size(1220, 540);
@@ -91,7 +92,7 @@
 
         private System.Windows.Forms.Button buttonEdit;
         private System.Windows.Forms.DataGridView dataGridViewClients;
-        private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.Button buttonNew;
     }
 }
 

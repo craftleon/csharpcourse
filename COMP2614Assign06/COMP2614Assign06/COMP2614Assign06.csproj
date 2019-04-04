@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-	<IntermediateOutputPath>R:\vs\$(SolutionName)\$(MSBuildProjectName)\obj\$(Configuration)\</IntermediateOutputPath>
+    <IntermediateOutputPath>R:\vs\$(SolutionName)\$(MSBuildProjectName)\obj\$(Configuration)\</IntermediateOutputPath>
     <OutputPath>R:\vs\$(SolutionName)\$(MSBuildProjectName)\bin\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -46,9 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
-    <Compile Include="ClientCollection.cs" />
-    <Compile Include="ClientRepository.cs" />
+    <Compile Include="Business\ClientValidation.cs" />
+    <Compile Include="Common\Client.cs" />
+    <Compile Include="Common\ClientCollection.cs" />
+    <Compile Include="Data\ClientRepository.cs" />
     <Compile Include="ClientViewModel.cs" />
     <Compile Include="EditDialog.cs">
       <SubType>Form</SubType>
@@ -93,5 +94,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

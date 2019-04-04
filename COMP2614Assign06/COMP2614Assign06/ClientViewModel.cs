@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using COMP2614Assign06.Common;
+using COMP2614Assign06.Business;
 
 namespace COMP2614Assign06
 {
@@ -17,26 +19,28 @@ namespace COMP2614Assign06
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // viewModel properties
-        public Client Client
-        {
-            get
-            {
-                return client;
-            }
-            set
-            {
-                client = value;
-                OnPropertyChanged();
-            }
-        }
-        public ClientCollection Clients { get; }
+        public ClientCollection Clients { get; set; }
 
         public ClientViewModel()
         {
-            Clients = ClientRepository.GetCustomerData();
+            Clients = ClientValidation.GetClients();
         }
 
-        private Client client;
+        public Client GetClientByIndex(int index)
+        {
+            return Clients[index];
+        }
+
+        public void SetClientByIndex(int index, Client client)
+        {
+            Clients[index] = client;
+            OnPropertyChanged("Clients");
+        }
+
+        public void AddClient(Client client)
+        {
+            Clients.Add(client);
+            OnPropertyChanged("Clients");
+        }
     }
 }
