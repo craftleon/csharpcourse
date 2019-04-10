@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using COMP2614Assign06.Common;
+using BusinessLib.Business;
+using BusinessLib.Common;
 
 namespace COMP2614Assign06
 {
@@ -18,38 +20,53 @@ namespace COMP2614Assign06
             InitializeComponent();
         }
 
-        private ClientViewModel clientVM;
+        public ClientViewModel ClientVM { get; set; }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            clientVM = new ClientViewModel();
+            labelCount.Text = "";
+            labelSales.Text = "";
+            ClientVM = new ClientViewModel();
+            ClientVM.PropertyChanged += ClientVM_PropertyChanged;   // handle ClientCollection change
             setupDataGridView();
+            updateLabels();
+        }
+
+        private void ClientVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            updateLabels();
+        }
+
+        private void updateLabels()
+        {
+            labelCount.Text = string.Format("{0}", ClientVM.ClientCount);
+            labelSales.Text = string.Format("{0:N2}", ClientVM.TotalYTDSales);
         }
 
         private void buttonNew_Click(object sender, EventArgs e)
         {
-            EditDialog dialog = new EditDialog();
+            EditDialog dialog = new EditDialog(ClientVM.ProvinceList);
             dialog.IsNewClient = true;
             dialog.Client = new Client();   // create new empty Client instance
             dialog.ShowDialog();
             if (dialog.DialogResult == DialogResult.OK)
             {
                 // add the new instance into ClientCollection list
-                clientVM.AddClient(dialog.Client);
+                ClientVM.AddClient(dialog.Client);
             }
         }
 
         private void buttonEdit_Click(object sender, EventArgs e)
         {
-            EditDialog dialog = new EditDialog();
+            EditDialog dialog = new EditDialog(ClientVM.ProvinceList);
             dialog.IsNewClient = false;
             int index = dataGridViewClients.CurrentRow.Index;
-            dialog.Client = new Client(clientVM.GetClientByIndex(index));    // create new Client with properties copied
+            dialog.Client = new Client(ClientVM.GetClientByIndex(index));    // create new Client with properties copied
             dialog.ShowDialog();
             if (dialog.DialogResult == DialogResult.OK)
             {
                 // reflect changes to ClientCollection list
-                clientVM.SetClientByIndex(index, dialog.Client);
+                ClientVM.SetClientByIndex(index, dialog.Client);
             }
         }
 
@@ -64,12 +81,57 @@ namespace COMP2614Assign06
             buttonEdit_Click(sender, e);
         }
 
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            Client client = ClientVM.GetClientByIndex(dataGridViewClients.CurrentRow.Index);
+            bool allowDelete = false;
+
+            if (checkBoxPrompt.Checked)
+            {
+                // show a messagebox to confirm deletion.
+                if (DialogResult.Yes == MessageBox.Show($@"Are you sure to delete client entry ""{client.ClientCode}"" from database?", "Deleting entry", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                {
+                    allowDelete = true;
+                }
+            }
+            else
+            {
+                allowDelete = true;
+            }
+
+            // delete the client
+            if (allowDelete)
+            {
+                try
+                {
+                    int rowsaffected = ClientValidation.DeleteClient(client);
+                    if (rowsaffected > 0)
+                    {
+                        ClientVM.RemoveClient(client);
+                    }
+                    else if (rowsaffected == 0)
+                    {
+                        MessageBox.Show("No DB changes were made", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(ex.Message, "DB Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Processing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
         // setup DataGridView
         private void setupDataGridView()
         {
             // configure for readonly
             dataGridViewClients.AutoGenerateColumns = false;
-            dataGridViewClients.DataSource = clientVM.Clients;
+            dataGridViewClients.DataSource = ClientVM.Clients;
             dataGridViewClients.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewClients.MultiSelect = false;
             dataGridViewClients.AllowUserToAddRows = false;

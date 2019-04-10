@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using COMP2614Assign06.Common;
-using COMP2614Assign06.Business;
+using BusinessLib.Common;
+using BusinessLib.Business;
+using System.Data.SqlClient;
 
 namespace COMP2614Assign06
 {
@@ -19,11 +20,43 @@ namespace COMP2614Assign06
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        // viewmodel properties
         public ClientCollection Clients { get; set; }
+        public List<string> ProvinceList { get; set; }
+        public int ClientCount
+        {
+            get
+            {
+                return Clients.Count;
+            }
+        }
+
+        public decimal TotalYTDSales
+        {
+            get
+            {
+                return Clients.TotalYTDSales;
+            }
+        }
 
         public ClientViewModel()
         {
-            Clients = ClientValidation.GetClients();
+            try
+            {
+                Clients = ClientValidation.GetClients();
+                ProvinceList = ClientValidation.GetProvinceList();
+            }
+            // This is optional. Catch exception in case db access or other error happens. Make a minimal list with error indications.
+            catch (SqlException ex)
+            {
+                Clients = new ClientCollection();
+                Clients.Add(new Client { ClientCode = "DB Error", CompanyName = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                Clients = new ClientCollection();
+                Clients.Add(new Client { ClientCode = "Error", CompanyName = ex.Message });
+            }
         }
 
         public Client GetClientByIndex(int index)
@@ -40,6 +73,12 @@ namespace COMP2614Assign06
         public void AddClient(Client client)
         {
             Clients.Add(client);
+            OnPropertyChanged("Clients");
+        }
+
+        public void RemoveClient(Client client)
+        {
+            Clients.Remove(client);
             OnPropertyChanged("Clients");
         }
     }

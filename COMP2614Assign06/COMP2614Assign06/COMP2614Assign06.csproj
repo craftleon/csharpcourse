@@ -17,8 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <IntermediateOutputPath>R:\vs\$(SolutionName)\$(MSBuildProjectName)\obj\$(Configuration)\</IntermediateOutputPath>
-    <OutputPath>R:\vs\$(SolutionName)\$(MSBuildProjectName)\bin\$(Configuration)\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -46,10 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\ClientValidation.cs" />
-    <Compile Include="Common\Client.cs" />
-    <Compile Include="Common\ClientCollection.cs" />
-    <Compile Include="Data\ClientRepository.cs" />
     <Compile Include="ClientViewModel.cs" />
     <Compile Include="EditDialog.cs">
       <SubType>Form</SubType>
@@ -94,6 +89,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessLib\BusinessLib.csproj">
+      <Project>{d6ec3867-592e-496c-90fd-649396e208be}</Project>
+      <Name>BusinessLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
